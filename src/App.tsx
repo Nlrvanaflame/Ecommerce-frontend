@@ -1,26 +1,50 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, RouterProvider, Outlet, RouteObject } from 'react-router-dom';
+import ProductPage from './components/ProductPage';
+import ProductAddEditPage from './components/ProductAddEditPage';
+import SupplierManagementPage from './components/SupplierManagementPage';
+import InventoryManagementPage from './components/InventoryManagementPage';
+import Navigation from './components/Navigation';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const routes: RouteObject[] = [
+    {
+      path: '/',
+      element: (
+        <div>
+          <h1>Your Project Title</h1>
+          <Navigation />
+          <hr />
+          <Outlet />
+        </div>
+      ),
+    },
+    {
+      path: '/products',
+      element: <ProductPage />,
+    },
+    {
+      path: '/products/add',
+      element: <ProductAddEditPage />,
+    },
+    {
+      path: '/products/edit/:id',
+      element: <ProductAddEditPage />,
+    },
+    {
+      path: '/suppliers',
+      element: <SupplierManagementPage />,
+    },
+    {
+      path: '/inventory',
+      element: <InventoryManagementPage />,
+    },
+  ];
+
+  const router = createBrowserRouter(routes);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;

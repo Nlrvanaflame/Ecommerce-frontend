@@ -1,9 +1,8 @@
 import axios from 'axios'
 
 
-const api = axios.create({
+const apiClient = axios.create({
   baseURL: 'http://localhost:4000'
 })
 
-export default api
-export * from './routes'
+export default apiClient

@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { useGetProduct } from '../hooks/useGetProducts'
 import { useUpdateProduct, useCreateProduct } from '../hooks/useProductMutations'
 import { useGetSuppliers } from '../hooks/useGetSuppliers'
+import useFormState from '../hooks/useFormState'
 
 interface FormData {
   name: string
@@ -16,21 +14,11 @@ const ProductAddEditPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const { data: product, error, isLoading } = useGetProduct(id || '')
   const { data: suppliers, error: suppliersError, isLoading: suppliersLoading } = useGetSuppliers()
+  const { register, handleSubmit, error, isLoading } = useFormState(id)
 
   const updateProduct = useUpdateProduct()
   const createProduct = useCreateProduct()
-
-  const { register, handleSubmit, setValue } = useForm<FormData>()
-
-  useEffect(() => {
-    if (product) {
-      setValue('name', product.name)
-      setValue('description', product.description)
-      setValue('price', product.price)
-    }
-  }, [product, setValue])
 
   const onSubmit = async (data: FormData) => {
     try {

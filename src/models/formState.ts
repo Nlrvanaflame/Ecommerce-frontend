@@ -1,4 +1,4 @@
-export interface FormDataState {
+export interface FormState {
     name: string;
     description: string;
     price:  number;

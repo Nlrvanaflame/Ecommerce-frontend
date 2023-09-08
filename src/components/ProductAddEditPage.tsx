@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 import { useGetProduct } from '../hooks/useGetProducts'
 import { useUpdateProduct, useCreateProduct } from '../hooks/useProductMutations'
 import { useGetSuppliers } from '../hooks/useGetSuppliers'
+
+interface FormData {
+  name: string
+  description: string
+  price: number
+  supplier_id: string
+}
 
 const ProductAddEditPage = () => {
   const { id } = useParams()
@@ -14,45 +22,22 @@ const ProductAddEditPage = () => {
   const updateProduct = useUpdateProduct()
   const createProduct = useCreateProduct()
 
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: 0,
-    supplier_id: suppliers ? suppliers[0]?.id : ''
-  })
+  const { register, handleSubmit, setValue } = useForm<FormData>()
 
   useEffect(() => {
     if (product) {
-      setFormData((prevState) => ({
-        ...prevState,
-        name: product.name,
-        description: product.description,
-        price: product.price
-      }))
+      setValue('name', product.name)
+      setValue('description', product.description)
+      setValue('price', product.price)
     }
-  }, [product])
+  }, [product, setValue])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    const dataWithCorrectedPrice = {
-      ...formData,
-      price: Number(formData.price)
-    }
-
+  const onSubmit = async (data: FormData) => {
     try {
       if (id) {
-        await updateProduct.mutateAsync({
-          id,
-          data: dataWithCorrectedPrice
-        })
+        await updateProduct.mutateAsync({ id, data })
       } else {
-        await createProduct.mutateAsync(dataWithCorrectedPrice)
+        await createProduct.mutateAsync(data)
       }
       navigate('/products')
     } catch (error) {
@@ -64,40 +49,35 @@ const ProductAddEditPage = () => {
   if (error || suppliersError) return <div>Error loading data</div>
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label>
           Name:
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
+          <input {...register('name')} />
         </label>
       </div>
       <div>
         <label>
           Description:
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
+          <input {...register('description')} />
         </label>
       </div>
       <div>
         <label>
           Price ($):
-          <input type="number" name="price" value={formData.price} onChange={handleChange} />
+          <input {...register('price')} type="number" />
         </label>
       </div>
-
-      {/* Conditionally render supplier dropdown when adding a new product */}
       {!id && (
         <div>
           <label>
             Supplier:
-            <select name="supplier_id" onChange={handleChange}>
-              <option value="">Select Supplier</option>
+            <select {...register('supplier_id')} defaultValue="">
+              <option value="" disabled>
+                Select
+              </option>
               {suppliers?.map((supplier) => (
-                <option key={supplier.id} value={supplier.id}>
+                <option value={supplier.id} key={supplier.id}>
                   {supplier.name}
                 </option>
               ))}
@@ -105,8 +85,9 @@ const ProductAddEditPage = () => {
           </label>
         </div>
       )}
-
-      <button type="submit">{id ? 'Save Changes' : 'Add Product'}</button>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
     </form>
   )
 }

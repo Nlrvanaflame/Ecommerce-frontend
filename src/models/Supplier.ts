@@ -4,3 +4,6 @@ export interface Supplier {
   contact_info: string;
   location: string;
 }
+
+ 
+export type NewSupplier = Omit<Supplier , 'id'>

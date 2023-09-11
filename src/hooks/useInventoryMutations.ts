@@ -1,31 +1,35 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { createInventoryRecord, updateInventoryRecord, deleteInventoryRecord } from '../services/routes/inventory';
-import { updateInventory } from '../models';
+import { Inventory, updateInventory, updateInventoryQuantity } from '../models';
 
-export const useCreateInventoryRecord = () => {
+export const useInventoryMutations = () => {
   const queryClient = useQueryClient();
-  return useMutation(createInventoryRecord, {
+
+  const createInventoryMutation = useMutation(createInventoryRecord, {
     onSuccess: () => {
       queryClient.invalidateQueries('inventory');
     },
   });
-};
 
-export const useUpdateInventoryRecord = () => {
-    const queryClient = useQueryClient();
-    return useMutation((data: { id: string, inventory: updateInventory }) => updateInventoryRecord(data.id, data.inventory), {
+  const updateInventoryMutation = useMutation(
+    ({ id, data }: { id: string; data: updateInventoryQuantity }) => updateInventoryRecord(id, data),
+    {
       onSuccess: () => {
         queryClient.invalidateQueries('inventory');
       },
-    });
-  };
+    }
+  );
   
 
-export const useDeleteInventoryRecord = () => {
-  const queryClient = useQueryClient();
-  return useMutation(deleteInventoryRecord, {
+  const deleteInventoryMutation = useMutation(deleteInventoryRecord, {
     onSuccess: () => {
       queryClient.invalidateQueries('inventory');
     },
   });
+
+  return {
+    createInventoryMutation,
+    updateInventoryMutation,
+    deleteInventoryMutation,
+  };
 };

@@ -9,3 +9,9 @@ export interface Inventory {
   
 
 export type updateInventory = Pick<Inventory,'product_id' | 'quantity'>
+
+export type updateInventoryQuantity = {
+  quantity: number;
+};
+
+

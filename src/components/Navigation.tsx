@@ -7,11 +7,9 @@ const Navigation: React.FC = () => {
   const theme = useTheme()
   return (
     <nav>
-      <Box bg="purple.600" p={2} color="white">
+      <Box bg="purple.700" p={2} color="white">
         <Text fontSize="2xl" fontWeight="bold">
-          <Link to="/products" style={{ color: theme.colors.yellow[600], textDecoration: 'none' }}>
-            Dashboard
-          </Link>
+          <Link to="/products">Dashboard</Link>
         </Text>
       </Box>
     </nav>

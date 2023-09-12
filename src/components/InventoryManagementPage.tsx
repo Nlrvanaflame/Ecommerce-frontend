@@ -1,3 +1,4 @@
+import { Box, Button, VStack, HStack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { getInventory } from '../services/routes/inventory'
@@ -19,12 +20,16 @@ const InventoryManagementPage: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>Inventory Management</h1>
-      {productsData.map(
-        (product) => product && <ProductInventory key={product.id} product={product} />
-      )}
-    </div>
+    <Box bg="gray.800" p={5} color="gray.100" borderRadius="md">
+      <Text fontSize="2xl" fontWeight="bold">
+        Inventory Management
+      </Text>
+      <VStack spacing={5} align="start">
+        {productsData.map(
+          (product) => product && <ProductInventory key={product.id} product={product} />
+        )}
+      </VStack>
+    </Box>
   )
 }
 
@@ -97,24 +102,37 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ product }) => {
   }
 
   return (
-    <div>
-      <h2>{product.name}</h2>
+    <Box bg="gray.700" p={5} borderRadius="md" boxShadow="sm">
+      <Text fontSize="xl" fontWeight="bold">
+        {product.name}
+      </Text>
       {inventoryData ? (
-        <>
-          <p>Current Quantity: {inventoryData.quantity}</p>
-          <button onClick={handleIncreaseQuantity}>Increase Quantity</button>
-          <button onClick={handleDecreaseQuantity} disabled={inventoryData.quantity <= 0}>
+        <HStack spacing={5} my={4}>
+          <Text>Current Quantity: {inventoryData.quantity}</Text>
+          <Button onClick={handleIncreaseQuantity} bg="purple.700" color="white">
+            Increase Quantity
+          </Button>
+          <Button
+            onClick={handleDecreaseQuantity}
+            disabled={inventoryData.quantity <= 0}
+            bg="purple.700"
+            color="white"
+          >
             Decrease Quantity
-          </button>
-          <button onClick={handleDeleteInventory}>Delete Inventory</button>
-        </>
+          </Button>
+          <Button onClick={handleDeleteInventory} bg="purple.700" color="white">
+            Delete Inventory
+          </Button>
+        </HStack>
       ) : (
-        <>
-          <p>No inventory record</p>
-          <button onClick={handleAddInventory}>Add Inventory</button>
-        </>
+        <HStack spacing={5} my={4}>
+          <Text>No inventory record</Text>
+          <Button onClick={handleAddInventory} bg="purple.700" color="white">
+            Add Inventory
+          </Button>
+        </HStack>
       )}
-    </div>
+    </Box>
   )
 }
 

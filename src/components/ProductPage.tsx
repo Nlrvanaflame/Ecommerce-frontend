@@ -38,20 +38,20 @@ const ProductPage = () => {
   if (error) return <div>Error loading products</div>
 
   return (
-    <Container bg="gray.500" borderWidth="3px" borderColor="black">
+    <Container bg="gray.800" p={5} borderRadius="md" boxShadow="xl">
       <Flex mb={5} as="nav" ml="-1.5">
         <Link to="add">
-          <Button bg="purple.600" color="yellow.600" mr={2}>
+          <Button bg="purple.700" color="white" mr={2}>
             Add New Product
           </Button>
         </Link>
         <Link to="/suppliers">
-          <Button bg="purple.600" color="yellow.600" mr={2}>
+          <Button bg="purple.700" color="white" mr={2}>
             Manage Suppliers
           </Button>
         </Link>
         <Link to="/inventory">
-          <Button bg="purple.600" color="yellow.600">
+          <Button bg="purple.700" color="white">
             Handle Inventory
           </Button>
         </Link>
@@ -60,21 +60,29 @@ const ProductPage = () => {
 
       <VStack spacing={5} align="stretch" mb={5}>
         {products?.map((product) => (
-          <Box key={product.id} p={5} shadow="md" borderWidth="3px" borderColor="black">
-            <Heading fontSize="3xl" fontWeight="bold" color="black" textShadow="1px 1px 2px purple">
+          <Box
+            key={product.id}
+            p={5}
+            bg="gray.700"
+            borderRadius="md"
+            boxShadow="lg"
+            borderWidth="2px"
+            borderColor="purple.600"
+          >
+            <Heading fontSize="2xl" fontWeight="bold" color="white">
               {product.name}
             </Heading>
-            <Text mt={4} fontSize="lg" lineHeight="1.6" color="gray.700">
+            <Text mt={4} fontSize="lg" color="gray.200">
               {product.description}
             </Text>
-            <Text mt={4} fontSize="xl" fontWeight="medium" color="black">
+            <Text mt={4} fontSize="xl" color="white">
               {product.price} $
             </Text>
             <HStack mt={4}>
-              <Button colorScheme="blue" onClick={() => handleEdit(product.id!)}>
+              <Button bg="purple.700" color="white" onClick={() => handleEdit(product.id!)}>
                 Edit
               </Button>
-              <Button colorScheme="red" onClick={() => handleDelete(product.id!)}>
+              <Button bg="purple.700" color="white" onClick={() => handleDelete(product.id!)}>
                 Delete
               </Button>
             </HStack>

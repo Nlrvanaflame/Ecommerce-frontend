@@ -1,3 +1,4 @@
+import { Box, FormControl, FormLabel, Input, NumberInput, Select, Button } from '@chakra-ui/react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useUpdateProduct, useCreateProduct } from '../hooks/useProductMutations'
 import { useGetSuppliers } from '../hooks/useGetSuppliers'
@@ -15,7 +16,7 @@ const ProductAddEditPage = () => {
   const navigate = useNavigate()
 
   const { data: suppliers, error: suppliersError, isLoading: suppliersLoading } = useGetSuppliers()
-  const { register, handleSubmit, error, isLoading } = useFormState(id)
+  const { register, handleSubmit, setValue, error, isLoading } = useFormState(id)
 
   const updateProduct = useUpdateProduct()
   const createProduct = useCreateProduct()
@@ -37,46 +38,55 @@ const ProductAddEditPage = () => {
   if (error || suppliersError) return <div>Error loading data</div>
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>
-          Name:
-          <input {...register('name')} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Description:
-          <input {...register('description')} />
-        </label>
-      </div>
-      <div>
-        <label>
-          Price ($):
-          <input {...register('price')} type="number" />
-        </label>
-      </div>
+    <Box
+      as="form"
+      width="400px"
+      margin="auto"
+      mt={5}
+      p={5}
+      borderWidth={1}
+      borderRadius="md"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <FormControl mb={4}>
+        <FormLabel>Name</FormLabel>
+        <Input {...register('name')} placeholder="Product Name" />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel>Description</FormLabel>
+        <Input {...register('description')} placeholder="Product Description" />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel>Price ($)</FormLabel>
+        <NumberInput
+          min={0}
+          onChange={(valueAsString, valueAsNumber) => {
+            setValue('price', valueAsNumber)
+          }}
+        >
+          <Input {...register('price')} placeholder="Product Price" />
+        </NumberInput>
+      </FormControl>
+
       {!id && (
-        <div>
-          <label>
-            Supplier:
-            <select {...register('supplier_id')} defaultValue="">
-              <option value="" disabled>
-                Select
+        <FormControl mb={4}>
+          <FormLabel>Supplier</FormLabel>
+          <Select {...register('supplier_id')} placeholder="Select">
+            {suppliers?.map((supplier) => (
+              <option value={supplier.id} key={supplier.id}>
+                {supplier.name}
               </option>
-              {suppliers?.map((supplier) => (
-                <option value={supplier.id} key={supplier.id}>
-                  {supplier.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+            ))}
+          </Select>
+        </FormControl>
       )}
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
+
+      <Button type="submit" colorScheme="blue">
+        Submit
+      </Button>
+    </Box>
   )
 }
 

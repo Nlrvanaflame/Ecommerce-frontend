@@ -12,7 +12,6 @@ function App() {
       path: '/',
       element: (
         <div>
-          <h1>E-Commerce</h1>
           <Navigation />
           <hr />
           <Outlet />

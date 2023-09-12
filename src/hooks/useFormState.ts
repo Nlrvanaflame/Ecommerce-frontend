@@ -16,7 +16,7 @@ const useFormState = (id: string | undefined) => {
       }
     }, [product, setValue]);
   
-    return { register, handleSubmit, product, error, isLoading };
+    return { register, handleSubmit,setValue, product, error, isLoading };
   };
   
   export default useFormState;

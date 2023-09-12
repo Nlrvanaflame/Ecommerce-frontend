@@ -2,14 +2,28 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 const queryClient = new QueryClient()
+
+const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        backgroundColor: 'gray.700',
+        color: 'black'
+      }
+    }
+  }
+})
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
     </QueryClientProvider>
   </React.StrictMode>
 )

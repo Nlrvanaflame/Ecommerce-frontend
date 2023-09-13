@@ -75,7 +75,7 @@ const SupplierManagementPage = () => {
             <Text flex={1}>{supplier.name}</Text>
             <Text flex={1}>{supplier.contact_info}</Text>
             <Text flex={1}>{supplier.location}</Text>
-            <Button onClick={() => handleDeleteSupplier(supplier.id)} colorScheme="red">
+            <Button onClick={() => handleDeleteSupplier(supplier.id)} bg="purple.700" color="white">
               Delete
             </Button>
           </HStack>

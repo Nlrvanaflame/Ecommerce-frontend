@@ -102,13 +102,17 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ product }) => {
   }
 
   return (
-    <Box bg="gray.700" p={5} borderRadius="md" boxShadow="sm">
+    <Box bg="gray.700" p={5} borderRadius="md" boxShadow="sm" width="750px">
       <Text fontSize="xl" fontWeight="bold">
         {product.name}
       </Text>
       {inventoryData ? (
         <HStack spacing={5} my={4}>
-          <Text>Current Quantity: {inventoryData.quantity}</Text>
+          <Box width="152px" textAlign="left">
+            <Text fontSize="sm" fontWeight="bold">
+              Current Quantity: {inventoryData.quantity}
+            </Text>
+          </Box>
           <Button onClick={handleIncreaseQuantity} bg="purple.700" color="white">
             Increase Quantity
           </Button>

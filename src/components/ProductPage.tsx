@@ -10,13 +10,11 @@ import {
   Flex,
   Spacer
 } from '@chakra-ui/react'
-import { useTheme } from '@chakra-ui/react'
 
 import { useGetProducts } from '../hooks/useGetProducts'
 import { useDeleteProduct } from '../hooks/useProductMutations'
 
 const ProductPage = () => {
-  const theme = useTheme()
   const { data: products, error, isLoading } = useGetProducts()
   const { mutateAsync: deleteProduct } = useDeleteProduct()
 

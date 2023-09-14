@@ -31,7 +31,16 @@ const ProductAddEditPage = () => {
   const navigate = useNavigate()
 
   const { data: suppliers, error: suppliersError, isLoading: suppliersLoading } = useGetSuppliers()
-  const { register, handleSubmit, setValue, error, isLoading } = useFormState(id)
+  const {
+    register,
+    validationRules,
+    handleSubmit,
+    setValue,
+    handleNumericInput,
+    product,
+    error,
+    isLoading
+  } = useFormState(id)
 
   const updateProduct = useUpdateProduct()
   const createProduct = useCreateProduct()
@@ -100,7 +109,11 @@ const ProductAddEditPage = () => {
               bgColor="gray.700"
               color="white"
             >
-              <Input {...register('price')} placeholder="Product Price" />
+              <Input
+                {...register('price', validationRules.price)}
+                placeholder="Product Price"
+                onKeyDown={handleNumericInput}
+              />
             </NumberInput>
           </FormControl>
 

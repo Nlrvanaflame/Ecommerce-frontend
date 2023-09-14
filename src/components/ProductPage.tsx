@@ -72,6 +72,7 @@ const ProductPage = () => {
           borderColor="purple.600"
           p={5}
           m={3}
+          overflowY="auto"
         >
           <VStack spacing={5} align="stretch">
             {products?.map((product) => (
@@ -108,7 +109,7 @@ const ProductPage = () => {
 
         <Box
           width="35%"
-          height="35vh"
+          height="35vh" // Fixed height to prevent expansion
           bg="gray.700"
           borderRadius="md"
           boxShadow="xl"

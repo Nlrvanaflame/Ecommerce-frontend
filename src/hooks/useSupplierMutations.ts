@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import { createSupplier, deleteSupplier } from '../services/routes/supplier';
+import { createSupplier, deleteSupplier, editSupplier } from '../services/routes/supplier';
 import queryClient from '..';  
 import { NewSupplier } from '../models';
 
@@ -21,3 +21,12 @@ export const useDeleteSupplier = () => {
     },
   });
 };
+
+export const useEditSupplier = () => {
+  return useMutation(( { id, data }: { id: string, data: Partial<NewSupplier> } ) => editSupplier(id, data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('suppliers');
+    },
+  });
+};
+

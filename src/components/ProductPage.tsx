@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate, Outlet } from 'react-router-dom'
 import {
   Box,
@@ -8,7 +9,14 @@ import {
   Heading,
   Container,
   Flex,
-  Spacer
+  Spacer,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter
 } from '@chakra-ui/react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { useGetProducts } from '../hooks/useGetProducts'
@@ -17,6 +25,8 @@ import { useDeleteProduct } from '../hooks/useProductMutations'
 const ProductPage = () => {
   const { data: products, error, isLoading } = useGetProducts()
   const { mutateAsync: deleteProduct } = useDeleteProduct()
+  const [isModalOpen, setModalOpen] = useState(false)
+  const [currentProductId, setCurrentProductId] = useState<string | null>(null)
 
   const navigate = useNavigate()
 
@@ -24,12 +34,22 @@ const ProductPage = () => {
     navigate(`edit/${id}`)
   }
 
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteProduct(id)
-    } catch (error) {
-      console.log('error:', error)
+  const handleDelete = (id: string) => {
+    setCurrentProductId(id)
+    setModalOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (currentProductId) {
+      try {
+        await deleteProduct(currentProductId)
+      } catch (error) {
+        console.log('error:', error)
+      }
     }
+
+    setModalOpen(false)
+    setCurrentProductId(null)
   }
 
   const chartData = products?.map((product) => ({
@@ -63,7 +83,7 @@ const ProductPage = () => {
 
       <Flex flexGrow={1} justifyContent="space-between">
         <Box
-          width="55%"
+          width="30%"
           height="75vh"
           bg="gray.700"
           borderRadius="md"
@@ -84,6 +104,8 @@ const ProductPage = () => {
                 boxShadow="lg"
                 borderWidth="2px"
                 borderColor="purple.600"
+                width="60%"
+                mx="auto"
               >
                 <Heading fontSize="2xl" fontWeight="bold" color="white">
                   {product.name}
@@ -109,7 +131,7 @@ const ProductPage = () => {
 
         <Box
           width="35%"
-          height="35vh" // Fixed height to prevent expansion
+          height="35vh"
           bg="gray.700"
           borderRadius="md"
           boxShadow="xl"
@@ -129,6 +151,23 @@ const ProductPage = () => {
           )}
         </Box>
       </Flex>
+
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent bg="gray.700">
+          <ModalHeader>Confirm Deletion</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>This will permanently delete the item! Are you sure about that?</ModalBody>
+          <ModalFooter>
+            <Button color="black" bgColor="white" mr={2} onClick={confirmDelete}>
+              Yes
+            </Button>
+            <Button color="white" bgColor="purple.600" onClick={() => setModalOpen(false)}>
+              No
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <Outlet />
     </Flex>
